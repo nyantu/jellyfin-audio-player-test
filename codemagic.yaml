@@ -14,10 +14,6 @@ workflows:
           # Remove immutable setting temporarily and install
           yarn config set enableImmutableInstalls false
           yarn install
-      - name: Build Android
-        script: |
-          cd $CM_PROJECT_DIR
-          yarn android --release
       - name: Build iOS
         script: |
           cd $CM_PROJECT_DIR
