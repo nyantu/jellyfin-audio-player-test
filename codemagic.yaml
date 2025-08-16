@@ -1,23 +1,27 @@
 workflows:
   fintunes-test:
     name: Fintunes Test Build
-    instance_type: mac_mini_m1  # Valid Mac instance
+    instance_type: mac_mini_m1
     max_build_duration: 60
     environment:
       flutter: stable
       node: latest
       cocoapods: default
+      ruby: default
     scripts:
       - name: Install dependencies
         script: |
           cd $CM_PROJECT_DIR
-          yarn install
+          npm install -g pnpm
+          pnpm install
+          gem install bundler
+          bundle install -j 6
       - name: Build Android
         script: |
-          pnpm android --release
+          fastlane android beta
       - name: Build iOS
         script: |
-          pnpm ios --release
+          fastlane ios beta
     artifacts:
       - build/app/outputs/flutter-apk/*.apk
       - build/ios/iphoneos/*.ipa
