@@ -1,7 +1,7 @@
 workflows:
   fintunes-test:
     name: Fintunes Test Build
-    instance_type: mac  # Use 'mac' for iOS builds
+    instance_type: mac_mini_m1  # Valid Mac instance
     max_build_duration: 60
     environment:
       flutter: stable
