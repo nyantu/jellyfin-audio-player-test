@@ -14,24 +14,17 @@ workflows:
           # Remove immutable setting temporarily and install
           yarn config set enableImmutableInstalls false
           yarn install
-      - name: Check available scripts
+          # Install React Native CLI globally
+          npm install -g @react-native-community/cli
+      - name: Install iOS dependencies
         script: |
-          cd $CM_PROJECT_DIR
-          echo "Available yarn scripts:"
-          yarn run --help 2>/dev/null || true
-          echo "Package.json scripts:"
-          cat package.json | grep -A 20 '"scripts"' || true
+          cd $CM_PROJECT_DIR/ios
+          pod install
       - name: Build iOS
         script: |
           cd $CM_PROJECT_DIR
-          # Try different approaches to build iOS
-          if yarn run ios --help > /dev/null 2>&1; then
-            yarn run ios --configuration Release
-          elif command -v npx > /dev/null 2>&1; then
-            npx react-native run-ios --configuration Release
-          else
-            echo "No iOS build method found"
-            exit 1
-          fi
+          # Use the React Native CLI directly
+          npx react-native run-ios --configuration Release --device
     artifacts:
-      - build/ios/iphoneos/*.ipa
+      - ios/build/Build/Products/Release-iphoneos/*.ipa
+      - ios/build/Build/Products/Release-iphoneos/*.app
