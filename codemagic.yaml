@@ -7,21 +7,20 @@ workflows:
       flutter: stable
       node: latest
       cocoapods: default
-      ruby: default
     scripts:
       - name: Install dependencies
         script: |
           cd $CM_PROJECT_DIR
-          npm install -g pnpm
-          pnpm install
-          gem install bundler
-          bundle install -j 6
+          # Use yarn since project is configured for it
+          yarn install --frozen-lockfile=false
       - name: Build Android
         script: |
-          fastlane android beta
+          cd $CM_PROJECT_DIR
+          yarn android --release
       - name: Build iOS
         script: |
-          fastlane ios beta
+          cd $CM_PROJECT_DIR
+          yarn ios --release
     artifacts:
       - build/app/outputs/flutter-apk/*.apk
       - build/ios/iphoneos/*.ipa
