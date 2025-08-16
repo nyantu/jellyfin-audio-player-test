@@ -10,7 +10,8 @@ workflows:
     scripts:
       - name: Install dependencies
         script: |
-         yarn install --cwd clone
+          cd $CM_PROJECT_DIR
+          yarn install
       - name: Build Android
         script: |
           pnpm android --release
