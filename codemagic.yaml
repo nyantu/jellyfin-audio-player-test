@@ -1,8 +1,7 @@
-
 workflows:
   fintunes-test:
     name: Fintunes Test Build
-    instance_type: mac
+    instance_type: mac  # Use 'mac' for iOS builds
     max_build_duration: 60
     environment:
       flutter: stable
@@ -12,10 +11,10 @@ workflows:
       - name: Install dependencies
         script: |
           pnpm install
-      - name: Run Android build
+      - name: Build Android
         script: |
           pnpm android --release
-      - name: Run iOS build
+      - name: Build iOS
         script: |
           pnpm ios --release
     artifacts:
