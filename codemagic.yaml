@@ -11,8 +11,9 @@ workflows:
       - name: Install dependencies
         script: |
           cd $CM_PROJECT_DIR
-          # Use yarn since project is configured for it
-          yarn install --frozen-lockfile=false
+          # Remove immutable setting temporarily and install
+          yarn config set enableImmutableInstalls false
+          yarn install
       - name: Build Android
         script: |
           cd $CM_PROJECT_DIR
