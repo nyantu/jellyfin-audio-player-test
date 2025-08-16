@@ -16,15 +16,33 @@ workflows:
           yarn install
           # Install React Native CLI globally
           npm install -g @react-native-community/cli
+      - name: Check project structure
+        script: |
+          cd $CM_PROJECT_DIR
+          echo "Project directory contents:"
+          ls -la
+          echo "Looking for iOS directory:"
+          find . -name "ios" -type d || echo "No ios directory found"
+          echo "Looking for Podfile:"
+          find . -name "Podfile" || echo "No Podfile found"
       - name: Install iOS dependencies
         script: |
-          cd $CM_PROJECT_DIR/ios
-          pod install
+          cd $CM_PROJECT_DIR
+          # Check if ios directory exists and has Podfile
+          if [ -d "ios" ] && [ -f "ios/Podfile" ]; then
+            cd ios
+            pod install
+          elif [ -f "Podfile" ]; then
+            pod install
+          else
+            echo "No Podfile found, skipping pod install"
+          fi
       - name: Build iOS
         script: |
           cd $CM_PROJECT_DIR
           # Use the React Native CLI directly
-          npx react-native run-ios --configuration Release --device
+          npx react-native run-ios --configuration Release
     artifacts:
       - ios/build/Build/Products/Release-iphoneos/*.ipa
       - ios/build/Build/Products/Release-iphoneos/*.app
+      - build/ios/iphoneos/*.ipa
